@@ -19,7 +19,6 @@ setup(
     download_url='https://github.com/LarryBrid/python-mailerlite/tarball/0.1',
     keywords='mailerlite api',
     description='A Python wrapper around the MailerLite API',
-    long_description=(read('README.md')),
     packages=find_packages(exclude=['tests*']),
     install_requires=['requests'],
     classifiers=[
