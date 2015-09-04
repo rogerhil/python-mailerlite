@@ -11,7 +11,7 @@ def read(*paths):
 
 setup(
     name='python-mailerlite',
-    version='0.1',
+    version='0.1a',
     author='Cam Fulton',
     author_email='jcameronfulton@gmail.com',
     license='MIT',
