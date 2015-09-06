@@ -4,7 +4,7 @@ import requests
 import json
 
 import campaign
-import list
+import subscriber_list
 import subscriber
 
 
@@ -216,13 +216,14 @@ class Api(object):
                 next n results.
 
         Returns:
-            A JSON response from the mailerlite API.
+            A list of SubscriberList objects containig the response from the
+            mailerlite API.
         """
         url = self._build_url('lists/')
         params = self._build_data({'limit': limit, 'page': page})
         response = self._get(url, params)
 
-        return [list.List._new_from_json_dict(x) for x in response['Results']]
+        return [subscriber_list.SubscriberList._new_from_json_dict(x) for x in response['Results']]
 
     def list_details(self, list_id):
         """
@@ -234,13 +235,16 @@ class Api(object):
             list_id(str): The id of the list.
 
         Returns:
-            A JSON response from the mailerlite API.
+            A SubscriberList object containing the response from the
+            mailerlite API.
         """
         url = self._build_url('lists/')
         params = self._build_data({'id': list_id})
         response = self._get(url, params)
 
-        return list.List._new_from_json_dict(response['Results'])
+        return subscriber_list.SubscriberList._new_from_json_dict(
+            response['Results'][0]
+        )
 
     def create_list(self, list_name):
         """
@@ -252,13 +256,16 @@ class Api(object):
             list_name(str): The name for the new list.
 
         Returns:
-            A JSON response from the mailerlite API.
+            A SubscriberList object containing the response from the
+            mailerlite API.
         """
         url = self._build_url('lists/')
         data = self._build_data({'name': list_name})
         response = self._post(url, params)
 
-        return list.List._new_from_json_dict(response['Results'])
+        return subscriber_list.SubscriberList._new_from_json_dict(
+            response['Results'][0]
+        )
 
     def update_list(self, list_id, new_list_name):
         """
@@ -271,13 +278,16 @@ class Api(object):
             new_list_name(str): The new name to assign to the list.
 
         Returns:
-            A JSON response from the mailerlite API.
+            A SubscriberList object containing the response from the
+            mailerlite API.
         """
         url = self._build_url('lists/')
         data = self._build_data({'id': list_id, 'name': new_list_name})
         response = self._post(url, params)
 
-        return list.List._new_from_json_dict(response['Results'])
+        return subscriber_list.SubscriberList._new_from_json_dict(
+            response['Results'][0]
+        )
 
     def delete_list(self, list_id):
         """
@@ -289,13 +299,16 @@ class Api(object):
             list_id(str): The ID of the list to delete.
 
         Returns:
-            A JSON response from the mailerlite API.
+            A SubscriberList object containing the response from the
+            mailerlite API.
         """
         url = self._build_url('lists/')
         params = self._build_data({'id': list_id})
         response = self._delete(url, params)
 
-        return list.List._new_from_json_dict(response['Results'])
+        return subscriber_list.SubscriberList._new_from_json_dict(
+            response['Results'][0]
+        )
 
     def active_subscribers(self, list_id, limit=1000, page=1):
         """

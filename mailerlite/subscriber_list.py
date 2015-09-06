@@ -1,4 +1,4 @@
-class List(object):
+class SubscriberList(object):
     def __init__(self, **kwargs):
         defaults = {
             'updated': None,
@@ -39,7 +39,7 @@ class List(object):
 
     @staticmethod
     def _new_from_json_dict(data):
-        return Campaign(
+        return SubscriberList(
             updated=data.get('updated', None),
             bounced=data.get('bounced', None),
             name=data.get('name', None),

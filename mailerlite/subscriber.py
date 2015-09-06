@@ -38,7 +38,7 @@ class Subscriber(object):
 
     @staticmethod
     def _new_from_json_dict(data):
-        return Campaign(
+        return Subscriber(
             email=data.get('email', None),
             name=data.get('name', None),
             date=data.get('date', None),
