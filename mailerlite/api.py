@@ -486,7 +486,7 @@ class Api(object):
         url = self._build_url('subscribers/unsubscribe/')
         data = self._build_data({'email': email})
 
-        return self.post(url, data)
+        return self._post(url, data)
 
     #######################################################################
 
