@@ -7,6 +7,12 @@ class Subscriber(object):
             'groups': None,
             'fields': None,
             'campaigns': None,
+            'link': None,
+            'reason': None,
+            'sent': None,
+            'opened': None,
+            'clicked': None,
+            'message': None,
         }
 
         for (param, default) in defaults.iteritems():
@@ -33,6 +39,18 @@ class Subscriber(object):
             data['fields'] = self.fields
         if self.campaigns:
             data['campaigns'] = self.campaigns
+        if self.link:
+            data['link'] = self.link
+        if self.reason:
+            data['reason'] = self.reason
+        if self.sent:
+            data['sent'] = self.sent
+        if self.opened:
+            data['opened'] = self.opened
+        if self.clicked:
+            data['clicked'] = self.clicked
+        if self.message:
+            data['message'] = self.message
 
         return data
 
@@ -45,4 +63,10 @@ class Subscriber(object):
             groups=data.get('groups', None),
             fields=data.get('fields', None),
             campaigns=data.get('campaigns', None),
+            link=data.get('link', None),
+            reason=data.get('reason', None),
+            sent=data.get('sent', None),
+            opened=data.get('opened', None),
+            clicked=data.get('clicked', None),
+            message=data.get('message', None),
         )

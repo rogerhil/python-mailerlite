@@ -84,7 +84,7 @@ class Api(object):
         params = self._build_data()
         response = self._get(url, params)
 
-        return campaign.Campaign._new_from_json_dict(response['Results'])
+        return campaign.Campaign._new_from_json_dict(response)
 
     def campaign_recipients(self, campaign_id, limit=1000, page=1):
         """
@@ -103,12 +103,9 @@ class Api(object):
         """
         url = self._build_url('campaigns/{0}/recipients/'.format(campaign_id))
         params = self._build_data()
+        response = self._get(url, params)
 
-        # !!!!!!!!!!! ~~~~ !!!!!!!!!!!
-
-        return self._get(url, params)
-
-        # !!!!!!!!!!! ~~~~ !!!!!!!!!!!
+        return [subscriber.Subscriber._new_from_json_dict(x) for x in response['Results']]
 
     def campaign_opens(self, campaign_id, limit=1000, page=1):
         """
@@ -125,8 +122,9 @@ class Api(object):
         """
         url = self._build_url('campaigns/{0}/opens/'.format(campaign_id))
         params = self._build_data()
+        response = self._get(url, params)
 
-        return self._get(url, params)
+        return [subscriber.Subscriber._new_from_json_dict(x) for x in response['Results']]
 
     def campaign_clicks(self, campaign_id, limit=1000, page=1):
         """
@@ -143,8 +141,9 @@ class Api(object):
         """
         url = self._build_url('campaigns/{0}/clicks/'.format(campaign_id))
         params = self._build_data()
+        response = self._get(url, params)
 
-        return self._get(url, params)
+        return [subscriber.Subscriber._new_from_json_dict(x) for x in response['Results']]
 
     def campaign_unsubscribes(self, campaign_id, limit=1000, page=1):
         """
@@ -163,8 +162,9 @@ class Api(object):
             'campaigns/{0}/unsubscribes/'.format(campaign_id)
         )
         params = self._build_data()
+        response = self._get(url, params)
 
-        return self._get(url, params)
+        return [subscriber.Subscriber._new_from_json_dict(x) for x in response['Results']]
 
     def campaign_bounces(self, campaign_id, limit=1000, page=1):
         """
@@ -181,8 +181,9 @@ class Api(object):
         """
         url = self._build_url('campaigns/{0}/bounces/'.format(campaign_id))
         params = self._build_data()
+        response = self._get(url, params)
 
-        return self._get(url, params)
+        return [subscriber.Subscriber._new_from_json_dict(x) for x in response['Results']]
 
     def campaign_spam_complaints(self, campaign_id, limit=1000, page=1):
         """
@@ -199,8 +200,9 @@ class Api(object):
         """
         url = self._build_url('campaigns/{0}/junk/'.format(campaign_id))
         params = self._build_data()
+        response = self._get(url, params)
 
-        return self._get(url, params)
+        return [subscriber.Subscriber._new_from_json_dict(x) for x in response['Results']]
 
     # List endpoints
 
@@ -327,8 +329,9 @@ class Api(object):
         """
         url = self._build_url('lists/{0}/active/'.format(list_id))
         params = self._build_data({'limit': limit, 'page': page})
+        response = self._get(url, params)
 
-        return self._get(url, params)
+        return [subscriber.Subscriber._new_from_json_dict(x) for x in response['Results']]
 
     def inactive_subscribers(self, list_id, limit=1000, page=1):
         """
@@ -347,8 +350,9 @@ class Api(object):
         """
         url = self._build_url('lists/{0}/unsubscribed/'.format(list_id))
         params = self._build_data({'limit': limit, 'page': page})
+        response = self._get(url, params)
 
-        return self._get(url, params)
+        return [subscriber.Subscriber._new_from_json_dict(x) for x in response['Results']]
 
     def bounced_subscribers(self, list_id, limit=1000, page=1):
         """Get all bounced subscribers for a given list.
@@ -366,8 +370,9 @@ class Api(object):
         """
         url = self._build_url('lists/{0}/bounced/'.format(list_id))
         params = self._build_data({'limit': limit, 'page': page})
+        response = self._get(url, params)
 
-        return self._get(url, params)
+        return [subscriber.Subscriber._new_from_json_dict(x) for x in response['Results']]
 
     # Subscriber endpoints
 
@@ -403,8 +408,9 @@ class Api(object):
             'fields': fields,
             'resubscribe': resubscribe
         })
+        response = self._post(url, data)
 
-        return self._post(url, data)
+        return subscriber.Subscriber._new_from_json_dict(response['Results'][0])
 
     def bulk_subscribe(self, list_id, subscribers, resubscribe=0):
         """Subscribe many users to a list.
@@ -439,7 +445,8 @@ class Api(object):
                 default 0.
 
         Returns:
-            A JSON response from the mailerlite API.
+            A list of subscriber objects containing all bad emails w/ a message
+            giving the reason for rejection.
         """
         url = self._build_url('subscribers/{0}/import'.format(list_id))
         data = self._build_data({
@@ -447,8 +454,9 @@ class Api(object):
             'subscribers': subscribers,
             'resubscribe': resubscribe
         })
+        response = self._post(url, data)
 
-        return self._post(url, data)
+        return [subscriber.Subscriber._new_from_json_dict(x) for x in response['Results']]
 
     def subscriber_details(self, email, history=0):
         """Get the details of a subscriber.
@@ -465,8 +473,9 @@ class Api(object):
         """
         url = self._build_url('subscribers/')
         params = self._build_data({'email': email, 'history': history})
+        response = self._get(url, params)
 
-        return self._get(url, params)
+        return subscriber.Subscriber._new_from_json_dict(response['Results'][0])
 
     def delete_subscriber(self, list_id, email):
         """Remove a subscriber from a list.
@@ -482,8 +491,9 @@ class Api(object):
         """
         url = self._build_url('subscribers/{0}/'.format(list_id))
         params = self._build_data({'email': email})
+        response = self._delete(url, params)
 
-        return self._delete(url, params)
+        return subscriber.Subscriber._new_from_json_dict(response['Results'][0])
 
     def unsubscribe(self, email):
         """Unsubscribe a user from all campaigns.
@@ -498,8 +508,9 @@ class Api(object):
         """
         url = self._build_url('subscribers/unsubscribe/')
         data = self._build_data({'email': email})
+        response = self._delete(url, params)
 
-        return self._post(url, data)
+        return subscriber.Subscriber._new_from_json_dict(response['Results'][0])
 
     #######################################################################
 

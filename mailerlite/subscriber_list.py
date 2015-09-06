@@ -8,6 +8,7 @@ class SubscriberList(object):
             'date': None,
             'total': None,
             'id': None,
+            'date': None,
         }
 
         for (param, default) in defaults.iteritems():
@@ -34,6 +35,8 @@ class SubscriberList(object):
             data['total'] = self.total
         if self.id:
             data['id'] = self.id
+        if self.date:
+            data['date'] = self.date
 
         return data
 
@@ -46,4 +49,5 @@ class SubscriberList(object):
             unsubscribed=data.get('unsubscribed', None),
             total=data.get('total', None),
             id=data.get('id', None),
+            date=data.get('date', None),
         )
