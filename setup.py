@@ -11,18 +11,18 @@ def read(*paths):
 
 setup(
     name='python-mailerlite',
-    version='0.1a',
+    version='0.1b',
     author='Cam Fulton',
     author_email='jcameronfulton@gmail.com',
     license='MIT',
     url='https://github.com/LarryBrid/python-mailerlite',
     download_url='https://github.com/LarryBrid/python-mailerlite/tarball/0.1',
-    keywords='mailerlite api',
+    keywords=['mailerlite', 'api', 'python-mailerlite']
     description='A Python wrapper around the MailerLite API',
     packages=find_packages(exclude=['tests*']),
     install_requires=['requests'],
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
