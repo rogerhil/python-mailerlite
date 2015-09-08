@@ -17,7 +17,7 @@ setup(
     license='MIT',
     url='https://github.com/LarryBrid/python-mailerlite',
     download_url='https://github.com/LarryBrid/python-mailerlite/tarball/0.1',
-    keywords=['mailerlite', 'api', 'python-mailerlite']
+    keywords=['mailerlite', 'api', 'python-mailerlite'],
     description='A Python wrapper around the MailerLite API',
     packages=find_packages(exclude=['tests*']),
     install_requires=['requests'],
