@@ -508,9 +508,9 @@ class Api(object):
         """
         url = self._build_url('subscribers/unsubscribe/')
         data = self._build_data({'email': email})
-        response = self._delete(url, params)
+        response = self._post(url, data)
 
-        return subscriber.Subscriber._new_from_json_dict(response['Results'][0])
+        return subscriber.Subscriber._new_from_json_dict(response)
 
     #######################################################################
 
