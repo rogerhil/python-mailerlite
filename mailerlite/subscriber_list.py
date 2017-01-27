@@ -11,7 +11,7 @@ class SubscriberList(object):
             'date': None,
         }
 
-        for (param, default) in defaults.iteritems():
+        for (param, default) in defaults.items():
             setattr(self, param, kwargs.get(param, default))
 
     def __str__(self):

@@ -3,9 +3,9 @@
 import requests
 import json
 
-import campaign
-import subscriber_list
-import subscriber
+from . import campaign
+from . import subscriber_list
+from . import subscriber
 
 
 class Api(object):
@@ -44,7 +44,7 @@ class Api(object):
             api_key (str): Your mailerlite api_key.
         """
         self.api_key = api_key
-        self.url = 'https://app.mailerlite.com/api/v1/'
+        self.url = 'https://api.mailerlite.com/api/v2/'
 
     # Campaign endpoints
 
@@ -221,7 +221,7 @@ class Api(object):
             A list of SubscriberList objects containig the response from the
             mailerlite API.
         """
-        url = self._build_url('lists/')
+        url = self._build_url('groups/')
         params = self._build_data({'limit': limit, 'page': page})
         response = self._get(url, params)
 
@@ -261,13 +261,11 @@ class Api(object):
             A SubscriberList object containing the response from the
             mailerlite API.
         """
-        url = self._build_url('lists/')
+        url = self._build_url('groups/')
         data = self._build_data({'name': list_name})
-        response = self._post(url, params)
+        response = self._post(url, data)
 
-        return subscriber_list.SubscriberList._new_from_json_dict(
-            response['Results'][0]
-        )
+        return subscriber_list.SubscriberList._new_from_json_dict(response)
 
     def update_list(self, list_id, new_list_name):
         """
@@ -376,7 +374,7 @@ class Api(object):
 
     # Subscriber endpoints
 
-    def subscribe(self, list_id, email, name=None, fields=None, resubscribe=0):
+    def subscribe(self, list_id, email, fields=None):
         """Subscribe a user to a list.
 
         http://docs.mailerlite.com/pages/subscribers#post
@@ -400,17 +398,14 @@ class Api(object):
         Returns:
             A JSON response from the mailerlite API.
         """
-        url = self._build_url('subscribers/{0}/'.format(list_id))
+        url = self._build_url('groups/{0}/subscribers'.format(list_id))
         data = self._build_data({
-            'id': list_id,
             'email': email,
-            'name': name,
             'fields': fields,
-            'resubscribe': resubscribe
         })
         response = self._post(url, data)
 
-        return subscriber.Subscriber._new_from_json_dict(response['Results'][0])
+        return subscriber.Subscriber._new_from_json_dict(response)
 
     def bulk_subscribe(self, list_id, subscribers, resubscribe=0):
         """Subscribe many users to a list.
@@ -518,17 +513,22 @@ class Api(object):
         return '{0}{1}'.format(self.url, path)
 
     def _build_data(self, data={}):
-        data['apiKey'] = self.api_key
+        #data['apiKey'] = self.api_key
         return data
 
+    @property
+    def headers(self):
+        return {'X-MailerLite-ApiKey': self.api_key, 'Content-Type': 'application/json'}
+
     def _get(self, url, params):
-        response = requests.get(url, params=params)
-        return (json.loads(response.content))
+        response = requests.get(url, params=params, headers=self.headers)
+        return response.json()
 
     def _post(self, url, data):
-        response = requests.post(url, data=data)
-        return (json.loads(response.content))
+        response = requests.post(url, data=json.dumps(data), headers=self.headers)
+        return response.json()
 
     def _delete(self, url, params):
-        response = requests.delete(url, params=params)
-        return (json.loads(response.content))
+        response = requests.delete(url, params=params, headers=self.headers)
+        return response.json()
+
